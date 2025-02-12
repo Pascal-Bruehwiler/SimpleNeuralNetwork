@@ -8,11 +8,13 @@ namespace MyNeuralNetwork
         public static void Main(string[] args)
         {
             // Initialize new Network
-            Network network = new Network(7, 10, 4);
+            Network network = new Network(20, 36, 12);
 
             // Load existing data if available
+
             try { network.LoadNetworkFromCSV(); }
             catch (Exception ex) { }
+
 
             // initialize new training object
             Training newTraining = new Training(network);
@@ -68,7 +70,7 @@ namespace MyNeuralNetwork
                     case 8:
                         currentDateTime = DateTime.Now.ToString("yyyy_dd_MM_h_mm_ss");
                         CopyFilesRecursively($"{projectDirectory}\\Data", $"{projectDirectory}\\OldModels\\{currentDateTime}");
-                        network = new Network(7, 10, 4);
+                        network = new Network(6, 8, 4);
                         newTraining = new Training(network);
                         network.SaveNetworkToCSV();
                         network.NetworkError = newTraining._totalError;

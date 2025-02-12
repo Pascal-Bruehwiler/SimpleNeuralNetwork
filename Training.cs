@@ -5,7 +5,7 @@
         public static readonly string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
 
         private Network _network;
-        public int _epochs;
+        private int _epochs { get; set; }
         public double _learningRate;
         public double _totalError;
         public double _wrongPercentage;
@@ -31,7 +31,7 @@
                 string[] rowValues = lines[i].Split(',');
                 // Split each line into an array of strings (columns)
                 matrix[i] = rowValues
-                    .Take(7)
+                    .Take(6)
                     .Select(double.Parse)
                     .ToArray();
             }
@@ -89,7 +89,7 @@
                         {
                             Console.WriteLine("\nFalsch Interpretierter Datensatz:");
                             Console.WriteLine("         \t Empf\tMotiv\tFach\tBBV\tMathe\tEngli\tDeutsch");
-                            Console.WriteLine($"TrainInputs:\t {trainingInputs[i][0]:F3}\t{trainingInputs[i][1]:F3}\t{trainingInputs[i][2]:F3}\t{trainingInputs[i][3]:F3}\t{trainingInputs[i][4]:F3}\t{trainingInputs[i][5]:F3}\t{trainingInputs[i][6]:F3}");
+                            Console.WriteLine($"TrainInputs:\t {trainingInputs[i][0]:F3}\t{trainingInputs[i][1]:F3}\t{trainingInputs[i][2]:F3}\t{trainingInputs[i][3]:F3}\t{trainingInputs[i][4]:F3}\t{trainingInputs[i][5]:F3}");
                             Console.WriteLine("\n          \t TOP\tA  \tB  \tC   ");
                             Console.WriteLine($"IstOutput :\t {output[0]:F3}\t{output[1]:F3}\t{output[2]:F3}\t{output[3]:F3}");
                             Console.WriteLine($"SollOutput:\t {trainingOutputs[i][0]:F3}\t{trainingOutputs[i][1]:F3}\t{trainingOutputs[i][2]:F3}\t{trainingOutputs[i][3]:F3}\n");
