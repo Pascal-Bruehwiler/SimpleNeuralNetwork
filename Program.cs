@@ -8,16 +8,15 @@ namespace MyNeuralNetwork
         public static void Main(string[] args)
         {
             // Initialize new Network
-            Network network = new Network(20, 36, 12);
+            Model model = new Model(7, 12, 4);
 
             // Load existing data if available
-
-            try { network.LoadNetworkFromCSV(); }
+            try { model.LoadNetworkFromCSV(); }
             catch (Exception ex) { }
 
+            //b model.SaveNetworkToCSV();
 
             // initialize new training object
-            Training newTraining = new Training(network);
 
             bool isValid = true;
             string currentDateTime = "";
@@ -27,34 +26,32 @@ namespace MyNeuralNetwork
                 switch (ShowMainMenu())
                 {
                     case 1:
-                        network.LoadNetworkFromCSV();
-                        newTraining.TrainModel();
-                        network.SaveNetworkToCSV();
-                        network.NetworkError = newTraining._totalError;
-                        network.NetworkWrongPercentage = newTraining._wrongPercentage;
+                        model.LoadNetworkFromCSV();
+                        model.TrainModel();
+                        model.SaveNetworkToCSV();
                         Console.WriteLine("\nPress any key to go to the main menu.");
                         Console.ReadKey();
                         break;
                     case 2:
-                        Console.WriteLine($"New epochs per training (current {newTraining._epochs}): ");
+                        Console.WriteLine($"New epochs per training (current {model.Epochs}): ");
                         try
                         {
                             int newEpoch = int.Parse(Console.ReadLine());
-                            newTraining._epochs = newEpoch;
+                            model.Epochs = newEpoch;
                         }
                         catch (Exception) { Console.WriteLine("Invalid Input"); }
-                        Console.WriteLine($"New learning rate (current {newTraining._learningRate}): ");
+                        Console.WriteLine($"New learning rate (current {model.LearningRate}): ");
                         try
                         {
                             double newLearningrate = double.Parse(Console.ReadLine());
-                            newTraining._learningRate = newLearningrate;
+                            model.LearningRate = newLearningrate;
                         }
                         catch (Exception) { Console.WriteLine("Invalid Input"); }
                         break;
                     case 3:
                         Console.WriteLine("Current Accuracy of the network:");
-                        Console.WriteLine($"Total Error:      {newTraining._totalError:F4}");
-                        Console.WriteLine($"Wrong Percentage: {newTraining._wrongPercentage:F4}");
+                        Console.WriteLine($"Total Error:      {model.TotalError:F4}");
+                        Console.WriteLine($"Wrong Percentage: {model.WrongPercentage:F4}");
                         Console.WriteLine("\nPress any key to go to the main menu.");
                         Console.ReadKey();
                         break;
@@ -65,16 +62,17 @@ namespace MyNeuralNetwork
                         CopyFilesRecursively($"{projectDirectory}\\Data", $"{projectDirectory}\\OldModels\\{currentDateTime}");
                         break;
                     case 6:
-
+                        model.LoadNetworkFromCSV();
+                        model.CheckSampleData();
+                        Console.WriteLine("\nPress any key to go to the main menu.");
+                        Console.ReadKey();
                         break;
                     case 8:
                         currentDateTime = DateTime.Now.ToString("yyyy_dd_MM_h_mm_ss");
                         CopyFilesRecursively($"{projectDirectory}\\Data", $"{projectDirectory}\\OldModels\\{currentDateTime}");
-                        network = new Network(6, 8, 4);
-                        newTraining = new Training(network);
-                        network.SaveNetworkToCSV();
-                        network.NetworkError = newTraining._totalError;
-                        network.NetworkWrongPercentage = newTraining._wrongPercentage;
+                        model = new Model(6, 8, 4);
+                        model.SaveNetworkToCSV();
+
                         Console.WriteLine("\nPress any key to go to the main menu.");
                         Console.ReadKey();
                         break;
