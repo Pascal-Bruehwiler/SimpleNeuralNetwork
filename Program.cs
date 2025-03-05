@@ -8,13 +8,14 @@ namespace MyNeuralNetwork
         public static void Main(string[] args)
         {
             // Initialize new Network
-            Model model = new Model(7, 12, 4);
+            Model model = new Model(45, 32, 11);
+            //model.SaveNetworkToCSV();
 
             // Load existing data if available
             try { model.LoadNetworkFromCSV(); }
             catch (Exception ex) { }
 
-            //b model.SaveNetworkToCSV();
+            //model.SaveNetworkToCSV();
 
             // initialize new training object
 
@@ -70,7 +71,7 @@ namespace MyNeuralNetwork
                     case 8:
                         currentDateTime = DateTime.Now.ToString("yyyy_dd_MM_h_mm_ss");
                         CopyFilesRecursively($"{projectDirectory}\\Data", $"{projectDirectory}\\OldModels\\{currentDateTime}");
-                        model = new Model(6, 8, 4);
+                        model = new Model(45, 32, 11);
                         model.SaveNetworkToCSV();
 
                         Console.WriteLine("\nPress any key to go to the main menu.");
@@ -86,6 +87,7 @@ namespace MyNeuralNetwork
             }
         }
 
+        // function to display main menu and catch user input errors
         public static int ShowMainMenu()
         {
             int option = 0;

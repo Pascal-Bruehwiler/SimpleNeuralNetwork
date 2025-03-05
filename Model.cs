@@ -35,8 +35,8 @@
             HiddenBias = GenerateRandomArray(hidden);
             OutputBias = GenerateRandomArray(output);
 
-            Epochs = 10000;
-            LearningRate = 0.05;
+            Epochs = 1000;
+            LearningRate = 0.97;
 
             trainingInputs = RetrieveInputDataFromCSV($"{ProjectDirectory}\\TrainingData.csv");
             trainingOutputs = RetrieveOutputDataFromCSV($"{ProjectDirectory}\\TrainingData.csv");
@@ -86,7 +86,7 @@
             for (var i = 0; i < matrix.GetLength(0); i++)
             {
                 var row = Enumerable.Range(0, matrix.GetLength(1)).Select(j => matrix[i, j].ToString());
-                writer.WriteLine(string.Join(",", row));
+                writer.WriteLine(string.Join(";", row));
             }
         }
 
@@ -103,7 +103,7 @@
             var lines = File.ReadLines(path).ToList();
             for (var i = 0; i < lines.Count; i++)
             {
-                var row = lines[i].Split(',').Select(double.Parse).ToArray();
+                var row = lines[i].Split(';').Select(double.Parse).ToArray();
                 for (var j = 0; j < row.Length; j++)
                     matrix[i, j] = row[j];
             }
@@ -147,7 +147,7 @@
 
             for (int i = 0; i < lines.Length; i++)
             {
-                string[] rowValues = lines[i].Split(',');
+                string[] rowValues = lines[i].Split(';');
                 if (rowValues.Length < InputNeurons)
                 {
                     Console.WriteLine("Error in Retrieve Data from CSV");
@@ -171,7 +171,7 @@
 
             for (int i = 0; i < lines.Length; i++)
             {
-                string[] rowValues = lines[i].Split(',');
+                string[] rowValues = lines[i].Split(';');
                 // Split each line into an array of strings (columns)
                 matrix[i] = rowValues
                     .Skip(Math.Max(0, rowValues.Length - OutputNeurons))
@@ -210,14 +210,31 @@
                     if (IndexIst != IndexSoll)
                     {
                         CountWrong++;
+
                         if (epoch == Epochs - 1)
                         {
                             Console.WriteLine("\nFalsch Interpretierter Datensatz:");
-                            Console.WriteLine("         \t Empf\tMotiv\tFach\tBBV\tMathe\tEngli\tDeutsch");
-                            Console.WriteLine($"TrainInputs:\t {trainingInputs[i][0]:F3}\t{trainingInputs[i][1]:F3}\t{trainingInputs[i][2]:F3}\t{trainingInputs[i][3]:F3}\t{trainingInputs[i][4]:F3}\t{trainingInputs[i][5]:F3}");
-                            Console.WriteLine("\n          \t TOP\tA  \tB  \tC   ");
-                            Console.WriteLine($"IstOutput :\t {output[0]:F3}\t{output[1]:F3}\t{output[2]:F3}\t{output[3]:F3}");
-                            Console.WriteLine($"SollOutput:\t {trainingOutputs[i][0]:F3}\t{trainingOutputs[i][1]:F3}\t{trainingOutputs[i][2]:F3}\t{trainingOutputs[i][3]:F3}\n");
+                            Console.WriteLine("         \t AA\tAU\tEDB\tGT\tINDL\tINA\tINP\tKV\tKR\tLOG\tPM");
+                            Console.Write("IstOutput :\t");
+                            for (int j = 0; j <= 10; j++)
+                            {
+                                if (j == IndexIst)
+                                { Console.ForegroundColor = ConsoleColor.Green; }
+                                else { Console.ResetColor(); }
+
+                                Console.Write($"{output[j]:F3}\t");
+                            }
+                            Console.WriteLine("\n");
+                            Console.Write("SollOutput:\t");
+                            for (int j = 0; j <= 10; j++)
+                            {
+                                if (j == IndexSoll)
+                                { Console.ForegroundColor = ConsoleColor.Green; }
+                                else { Console.ResetColor(); }
+                                Console.Write($"{trainingOutputs[i][j]:F3}\t");
+                            }
+                            Console.ResetColor();
+                            Console.WriteLine("\n");
                         }
                     }
 
@@ -279,7 +296,7 @@
                 WrongPercentage = wrongPercent;
 
                 // Ausgabe des Fehlers nach jeder 100sten Epoche
-                Console.WriteLine($"Epoch {epoch + 1}\t Error: {totalError:F4}\t Fehlerprozent: {wrongPercent:F2}");
+                Console.WriteLine($"Epoch {epoch + 1}\t Error: {totalError:F8}\t Fehlerprozent: {wrongPercent:F2}");
             }
 
         }
